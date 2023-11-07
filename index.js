@@ -1,9 +1,9 @@
 const express = require('express');
 const cors = require("cors");
 require('dotenv').config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
-const port = process.env.PORT || 200;
+const port = process.env.PORT || 500;
 
 
 // middleware
@@ -39,6 +39,38 @@ async function run() {
             const result = await cursor.toArray();
             res.send(result);
         });
+
+        app.get("/createAssignment/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await assignmentCollection.findOne(query);
+            res.send(result);
+        });
+
+        
+
+        app.put("/createAssignment/:id", async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const updatedAssignment = req.body;
+            console.log(updatedAssignment);
+            const assignment = {
+                $set: {
+                    title: updatedAssignment.title,
+                    description: updatedAssignment.description,
+                    marks: updatedAssignment.marks,
+                    photo: updatedAssignment.photo,
+                    difficulty: updatedAssignment.difficulty,
+                    dueDate: updatedAssignment.dueDate,
+                    email: updatedAssignment.email,
+                }
+            }
+            const result = await assignmentCollection.updateOne(filter, assignment, options);
+            res.send(result);
+        })
+
+
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
