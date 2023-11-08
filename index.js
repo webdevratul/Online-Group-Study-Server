@@ -27,6 +27,7 @@ async function run() {
     try {
 
         const assignmentCollection = client.db("OnlineGroupStudyAssignment").collection("assignment");
+        const individualAssignmentCollection = client.db("OnlineGroupStudyIndividualAssignment").collection("individualAssignment");
 
         app.post("/createAssignment", async (req, res) => {
             const createAssignmentData = req.body;
@@ -34,9 +35,10 @@ async function run() {
             res.send(result);
         });
 
-        app.post("/createAssignment", async (req, res) => {
-            const createAssignmentData = req.body;
-            const result = await assignmentCollection.insertOne(createAssignmentData);
+        app.post("/individualCreateAssignment", async (req, res) => {
+            const createIndividualAssignmentData = req.body;
+            const result = await individualAssignmentCollection.insertOne(createIndividualAssignmentData);
+            console.log(createIndividualAssignmentData);
             res.send(result);
         });
 
