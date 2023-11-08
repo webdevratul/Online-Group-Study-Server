@@ -34,6 +34,12 @@ async function run() {
             res.send(result);
         });
 
+        app.post("/createAssignment", async (req, res) => {
+            const createAssignmentData = req.body;
+            const result = await assignmentCollection.insertOne(createAssignmentData);
+            res.send(result);
+        });
+
         app.get("/createAssignment", async (req, res) => {
             const cursor = assignmentCollection.find();
             const result = await cursor.toArray();
@@ -47,7 +53,7 @@ async function run() {
             res.send(result);
         });
 
-        
+
 
         app.put("/createAssignment/:id", async (req, res) => {
             const id = req.params.id;
@@ -102,4 +108,6 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
     console.log(`listening on port ${port}`);
 });
+
+
 
